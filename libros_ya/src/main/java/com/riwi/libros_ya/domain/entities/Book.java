@@ -1,10 +1,9 @@
 package com.riwi.libros_ya.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Entity(name = "book")
 @Data
@@ -25,4 +24,22 @@ public class Book {
     private String genre;
     @Column(length = 20, nullable = false)
     private String isbn;
+
+    //Relaciones
+    @OneToMany(mappedBy = "book",
+                cascade = CascadeType.ALL,
+                orphanRemoval = false,
+                fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "book",
+                cascade = CascadeType.ALL,
+                orphanRemoval = false,
+                fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    List<Loan> loans;
+
 }

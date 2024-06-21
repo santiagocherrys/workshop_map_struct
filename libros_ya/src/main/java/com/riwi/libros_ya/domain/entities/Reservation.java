@@ -22,6 +22,13 @@ public class Reservation {
     private LocalDateTime reservation_date;
     @Column(length = 20, nullable = false)
     private String status;
-    private Long user_id;
-    private Long book_id;
+
+    //Relaciones
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private Book book;
 }
