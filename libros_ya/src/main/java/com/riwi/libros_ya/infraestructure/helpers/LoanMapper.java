@@ -6,10 +6,14 @@ import com.riwi.libros_ya.domain.entities.Loan;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface LoanMapper {
 
     Loan loanReqToEntity(LoanRequest loanReq);
 
     LoanResponse entityToLoanResp(Loan loan);
+
+    List<LoanResponse> toListLoanResp(List<Loan> loans);
 }

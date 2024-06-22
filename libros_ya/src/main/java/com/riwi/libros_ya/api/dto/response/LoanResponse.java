@@ -1,5 +1,6 @@
 package com.riwi.libros_ya.api.dto.response;
 
+import com.riwi.libros_ya.domain.entities.Book;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,6 @@ public class LoanResponse {
     private LocalDateTime loan_date;
     private LocalDateTime return_date;
     private String status;
+    private UserBasicResp user;
+    private BookToLoanResp book;
 }

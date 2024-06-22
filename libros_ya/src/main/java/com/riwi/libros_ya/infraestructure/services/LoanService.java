@@ -2,7 +2,9 @@ package com.riwi.libros_ya.infraestructure.services;
 
 import com.riwi.libros_ya.api.dto.request.LoanRequest;
 import com.riwi.libros_ya.api.dto.response.LoanResponse;
+import com.riwi.libros_ya.domain.entities.Book;
 import com.riwi.libros_ya.domain.entities.Loan;
+import com.riwi.libros_ya.domain.repositories.BookRepository;
 import com.riwi.libros_ya.domain.repositories.LoanRepository;
 import com.riwi.libros_ya.domain.repositories.UserRepository;
 import com.riwi.libros_ya.infraestructure.abstract_serives.ILoanService;
@@ -11,6 +13,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,11 +29,14 @@ public class LoanService implements ILoanService {
     private final UserRepository userRepository;
 
     @Autowired
+    private final BookRepository bookRepository;
+
+    @Autowired
     private final LoanMapper loanMapper;
 
     @Override
     public void delete(Long id) {
-
+        this.loanRepository.delete(this.find(id));
     }
 
     @Override
@@ -37,23 +45,40 @@ public class LoanService implements ILoanService {
 
         //Se crea activo
         loan.setStatus("Activo");
+        //Se rectifica si hay user
         loan.setUser(this.userRepository.findById(loanRequest.getUser_id()).orElseThrow());
+        //Se rectifica si hay libro
+        loan.setBook(this.bookRepository.findById(loanRequest.getBook_id()).orElseThrow());
         loan = this.loanRepository.save(loan);
         return this.loanMapper.entityToLoanResp(loan);
     }
 
     @Override
     public LoanResponse update(Long id, LoanRequest loanRequest) {
-        return null;
+        //Se crea objeto
+        Loan loan = new Loan();
+        loan = this.find(id);
+        loan.setReturn_date(loanRequest.getReturn_date());
+        //Se pone la hora
+        LocalDateTime today = LocalDateTime.now();
+        loan.setLoan_date(today);
+        loan.setStatus(loanRequest.getStatus());
+
+        return this.loanMapper.entityToLoanResp(loan);
     }
 
     @Override
     public List<LoanResponse> getAll() {
-        return null;
+        return this.loanMapper.toListLoanResp(this.loanRepository.findAll());
     }
 
     @Override
-    public LoanResponse getById(Long aLong) {
-        return null;
+    public LoanResponse getById(Long id){
+
+        return this.loanMapper.entityToLoanResp(this.find(id));
+    }
+
+    private Loan find(long id){
+        return this.loanRepository.findById(id).orElseThrow();
     }
 }
