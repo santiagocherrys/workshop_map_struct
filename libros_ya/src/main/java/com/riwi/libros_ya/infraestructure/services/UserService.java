@@ -25,23 +25,31 @@ public class UserService implements IUserService {
 
     @Override
     public void delete(Long id) {
-
+        this.userRepository.delete(this.find(id));
     }
 
     @Override
     public UserResponse create(UserRequest userRequest) {
         User user = this.userMapper.UserReqToEntity(userRequest);
         //Se setea la listas vacias
-        user = this.userRepository.save(user);
         user.setReservations(new ArrayList<>());
         user.setLoans(new ArrayList<>());
+        user = this.userRepository.save(user);
+    
         System.out.println("esto es user " + user);
         return this.userMapper.EntityToUserResp(user);
     }
 
     @Override
     public UserResponse update(Long id, UserRequest userRequest) {
-        return null;
+        //Se busca el usuario
+        User user = this.find(id);
+        user.setUsername(userRequest.getUsername());
+        user.setPassword(userRequest.getPassword());
+        user.setEmail(userRequest.getEmail());
+        user.setFull_name(userRequest.getFull_name());
+        
+        return this.userMapper.EntityToUserResp(this.userRepository.save(user));
     }
 
     @Override
@@ -52,6 +60,10 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse getById(Long id){
-        return null;
+        return this.userMapper.EntityToUserResp(this.find(id));
+    }
+
+    private User find(Long id){
+        return this.userRepository.findById(id).orElseThrow();
     }
 }

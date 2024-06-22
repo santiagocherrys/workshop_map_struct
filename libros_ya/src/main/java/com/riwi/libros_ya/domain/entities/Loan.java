@@ -1,6 +1,7 @@
 package com.riwi.libros_ya.domain.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class Loan {
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime loan_date;
-    @CreationTimestamp
+    @NotNull
     private LocalDateTime return_date;
     @Column(length = 20, nullable = false)
     private String status;
