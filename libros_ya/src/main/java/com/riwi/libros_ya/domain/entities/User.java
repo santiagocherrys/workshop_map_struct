@@ -42,4 +42,18 @@ public class User {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Loan> loans;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", full_name='" + full_name + '\'' +
+                ", role=" + role +
+                ", reservations=" + reservations +
+                ", loans=" + loans +
+                '}';
+    }
 }
