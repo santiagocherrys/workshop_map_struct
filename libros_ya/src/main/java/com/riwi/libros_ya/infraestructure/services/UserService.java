@@ -6,6 +6,7 @@ import com.riwi.libros_ya.domain.entities.User;
 import com.riwi.libros_ya.domain.repositories.UserRepository;
 import com.riwi.libros_ya.infraestructure.abstract_serives.IUserService;
 import com.riwi.libros_ya.infraestructure.helpers.UserMapper;
+import com.riwi.libros_ya.util.exceptions.IdNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,6 @@ public class UserService implements IUserService {
     }
 
     private User find(Long id){
-        return this.userRepository.findById(id).orElseThrow();
+        return this.userRepository.findById(id).orElseThrow(()-> new IdNotFoundException("User"));
     }
 }

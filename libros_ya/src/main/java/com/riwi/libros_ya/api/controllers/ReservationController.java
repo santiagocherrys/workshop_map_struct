@@ -8,6 +8,7 @@ import com.riwi.libros_ya.infraestructure.abstract_serives.IReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<ReservationResponse> insert(
+            @Validated
             @RequestBody ReservationPostReq request
             ){
         ReservationRequest reservationRequest = ReservationRequest.builder()
@@ -48,6 +50,7 @@ public class ReservationController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<ReservationResponse> update(@PathVariable Long id,
+                                                      @Validated
                                                       @RequestBody ReservationUpdateRequest request){
         ReservationRequest reservationRequest = ReservationRequest.builder()
                 .status(request.getStatus())

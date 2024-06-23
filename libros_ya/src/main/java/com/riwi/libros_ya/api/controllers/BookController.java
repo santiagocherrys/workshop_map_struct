@@ -1,5 +1,6 @@
 package com.riwi.libros_ya.api.controllers;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.riwi.libros_ya.api.dto.request.BookRequest;
@@ -23,7 +24,9 @@ public class BookController{
     private final IBookService bookService;
     
     @PostMapping
-    public ResponseEntity<BookResponse> insert(@RequestBody BookRequest request){
+    public ResponseEntity<BookResponse> insert(
+            @Validated
+            @RequestBody BookRequest request){
         return ResponseEntity.ok(this.bookService.create(request));
     }
 
@@ -45,6 +48,7 @@ public class BookController{
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<BookResponse> update(@PathVariable Long id,
+                                               @Validated
                                                @RequestBody BookRequest request){
         return ResponseEntity.ok(this.bookService.update(id,request));
     }

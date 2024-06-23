@@ -9,6 +9,7 @@ import com.riwi.libros_ya.infraestructure.abstract_serives.ILoanService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class LoanController {
 
     @PostMapping
     public ResponseEntity<LoanResponse> insert(
+            @Validated
             @RequestBody LoanRequest request
             ){
         return ResponseEntity.ok(this.loanService.create(request));
@@ -45,6 +47,7 @@ public class LoanController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<LoanResponse> update(@PathVariable Long id,
+                                               @Validated
                                                @RequestBody LoanUpdateRequest request){
         LoanRequest loanRequest = new LoanRequest();
         loanRequest.setStatus(request.getStatus());

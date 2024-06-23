@@ -3,6 +3,7 @@ package com.riwi.libros_ya.infraestructure.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.riwi.libros_ya.util.exceptions.IdNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +71,7 @@ public class BookService implements IBookService {
     }
 
     private Book find(Long id){
-        return this.bookRepository.findById(id).orElseThrow();
+        return this.bookRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Book"));
     }
     
 }

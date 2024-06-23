@@ -7,6 +7,7 @@ import com.riwi.libros_ya.infraestructure.abstract_serives.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> insert(
+            @Validated
             @RequestBody UserRequest request){
         return ResponseEntity.ok(this.userService.create(request));
     }
@@ -46,6 +48,7 @@ public class UserController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserResponse> update(@PathVariable Long id,
+                                            @Validated
                                             @RequestBody UserUpdateRequest request){
         UserRequest userRequest = new UserRequest();
         userRequest.setUsername(request.getUsername());

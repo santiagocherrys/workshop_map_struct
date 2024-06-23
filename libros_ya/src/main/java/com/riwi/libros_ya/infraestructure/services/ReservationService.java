@@ -8,6 +8,7 @@ import com.riwi.libros_ya.domain.repositories.ReservationRepository;
 import com.riwi.libros_ya.domain.repositories.UserRepository;
 import com.riwi.libros_ya.infraestructure.abstract_serives.IReservationService;
 import com.riwi.libros_ya.infraestructure.helpers.ReservationMapper;
+import com.riwi.libros_ya.util.exceptions.IdNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,9 +42,9 @@ public class ReservationService implements IReservationService {
         //Se crea activo
         reservation.setStatus("Activo");
         //Se rectifica si hay user
-        reservation.setUser(this.userRepository.findById(reservationRequest.getUser_id()).orElseThrow());
+        reservation.setUser(this.userRepository.findById(reservationRequest.getUser_id()).orElseThrow(()-> new IdNotFoundException("User")));
         //Se rectifica si hay book
-        reservation.setBook(this.bookRepository.findById(reservationRequest.getBook_id()).orElseThrow());
+        reservation.setBook(this.bookRepository.findById(reservationRequest.getBook_id()).orElseThrow(()-> new IdNotFoundException("Book")));
         //Se guarda en la base de datos
         reservation = this.reservationRepository.save(reservation);
         return this.reservationMapper.entityToReservationResp(reservation);
@@ -71,6 +72,6 @@ public class ReservationService implements IReservationService {
     }
 
     private Reservation find(Long id){
-        return this.reservationRepository.findById(id).orElseThrow();
+        return this.reservationRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Reservation"));
     }
 }

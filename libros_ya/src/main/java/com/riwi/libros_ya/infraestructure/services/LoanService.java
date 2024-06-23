@@ -9,6 +9,7 @@ import com.riwi.libros_ya.domain.repositories.LoanRepository;
 import com.riwi.libros_ya.domain.repositories.UserRepository;
 import com.riwi.libros_ya.infraestructure.abstract_serives.ILoanService;
 import com.riwi.libros_ya.infraestructure.helpers.LoanMapper;
+import com.riwi.libros_ya.util.exceptions.IdNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,9 +47,9 @@ public class LoanService implements ILoanService {
         //Se crea activo
         loan.setStatus("Activo");
         //Se rectifica si hay user
-        loan.setUser(this.userRepository.findById(loanRequest.getUser_id()).orElseThrow());
+        loan.setUser(this.userRepository.findById(loanRequest.getUser_id()).orElseThrow(()-> new IdNotFoundException("User")));
         //Se rectifica si hay libro
-        loan.setBook(this.bookRepository.findById(loanRequest.getBook_id()).orElseThrow());
+        loan.setBook(this.bookRepository.findById(loanRequest.getBook_id()).orElseThrow(()-> new IdNotFoundException("Book")));
         loan = this.loanRepository.save(loan);
         return this.loanMapper.entityToLoanResp(loan);
     }
@@ -79,6 +80,6 @@ public class LoanService implements ILoanService {
     }
 
     private Loan find(long id){
-        return this.loanRepository.findById(id).orElseThrow();
+        return this.loanRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Loan"));
     }
 }
