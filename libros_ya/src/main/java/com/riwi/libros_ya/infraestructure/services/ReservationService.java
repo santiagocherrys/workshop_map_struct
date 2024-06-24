@@ -2,7 +2,9 @@ package com.riwi.libros_ya.infraestructure.services;
 
 import com.riwi.libros_ya.api.dto.request.ReservationRequest;
 import com.riwi.libros_ya.api.dto.response.ReservationResponse;
+import com.riwi.libros_ya.domain.entities.Book;
 import com.riwi.libros_ya.domain.entities.Reservation;
+import com.riwi.libros_ya.domain.entities.User;
 import com.riwi.libros_ya.domain.repositories.BookRepository;
 import com.riwi.libros_ya.domain.repositories.ReservationRepository;
 import com.riwi.libros_ya.domain.repositories.UserRepository;
@@ -73,5 +75,17 @@ public class ReservationService implements IReservationService {
 
     private Reservation find(Long id){
         return this.reservationRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Reservation"));
+    }
+
+    @Override
+    public List<ReservationResponse> findByUserId(Long user_id) {
+        User user = this.userRepository.findById(user_id).orElseThrow(() -> new IdNotFoundException("user"));
+        return this.reservationMapper.toListReservationResp(this.reservationRepository.findByUser(user));
+    }
+
+    @Override
+    public List<ReservationResponse> findByBookId(Long book_id) {
+        Book book = this.bookRepository.findById(book_id).orElseThrow(() -> new IdNotFoundException("book"));
+        return this.reservationMapper.toListReservationResp(this.reservationRepository.findByBook(book));
     }
 }
