@@ -4,6 +4,7 @@ import com.riwi.libros_ya.api.dto.request.LoanRequest;
 import com.riwi.libros_ya.api.dto.response.LoanResponse;
 import com.riwi.libros_ya.domain.entities.Book;
 import com.riwi.libros_ya.domain.entities.Loan;
+import com.riwi.libros_ya.domain.entities.User;
 import com.riwi.libros_ya.domain.repositories.BookRepository;
 import com.riwi.libros_ya.domain.repositories.LoanRepository;
 import com.riwi.libros_ya.domain.repositories.UserRepository;
@@ -81,5 +82,11 @@ public class LoanService implements ILoanService {
 
     private Loan find(long id){
         return this.loanRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Loan"));
+    }
+
+    @Override
+    public List<LoanResponse> findByUserId(Long user_id) {
+        User user = this.userRepository.findById(user_id).orElseThrow(() -> new IdNotFoundException("user"));
+        return this.loanMapper.toListLoanResp(this.loanRepository.findByUser(user));
     }
 }

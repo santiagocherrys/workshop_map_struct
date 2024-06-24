@@ -54,4 +54,10 @@ public class LoanController {
         loanRequest.setReturn_date(request.getReturn_date());
         return ResponseEntity.ok(this.loanService.update(id,loanRequest));
     }
+
+    //Consulta avanzada
+    @GetMapping(path = "/{user_id}/users")
+    public ResponseEntity<List<LoanResponse>> getByUser(@PathVariable Long user_id){
+        return ResponseEntity.ok(this.loanService.findByUserId(user_id));
+    }
 }
